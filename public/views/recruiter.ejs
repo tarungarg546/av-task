@@ -241,12 +241,30 @@
 			return res.json();
 		})
 		.then((result)=>{
-			log(result);
-			// var a = document.createElement('a');
-			// a.href = 'data:attachment/csv,' +  encodeURIComponent(csvString);
-			// a.target = '_blank';
-			// a.download = 'myFile.csv';
-			// a.click();
+			let arr=[],final=[],headers=[];
+			for(let key in result[0]) {
+				if(result[0].hasOwnProperty(key)&&key!="access_level")
+					headers.push(key);
+			}
+			final.push(headers);
+			const length=result.length,hlen=headers.length;
+			for(let index=0;index<length;index++) {
+				arr=[];
+				for(let jdex=0;jdex<hlen;jdex++)
+					arr.push(result[index][headers[jdex]]);
+				final.push(arr);
+			}
+			let csvRows = [];
+			for(let i=0, l=final.length; i<l; ++i){
+			    csvRows.push(final[i].join(','));
+			}
+			const csvString = csvRows.join("\n");
+			log(csvString);
+			let a = document.createElement('a');
+			a.href = 'data:attachment/csv,' +  encodeURIComponent(csvString);
+			a.target = '_blank';
+			a.download = 'myFile.csv';
+			a.click();
 		})
 		// fetch("/signIn",{
 		// 	method:"POST",

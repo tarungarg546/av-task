@@ -10,9 +10,9 @@ const port=process.env.PORT || 8080;
 let constructSQL=(json)=>{
 	let sql="Select * from users where ";
 	if(json.resume) {
-		sql+="`Resume (Yes/No)`='Yes'";
+		sql+="`Resume (Yes/No)`=\"Yes\"";
 	} else {
-		sql+="`Resume (Yes/No)`='No'";
+		sql+="`Resume (Yes/No)`=\"No\"";
 	}
 	if(json.analyticsExperience) {
 		sql+=" AND "+"`Analytics in Exp.`!=''";
@@ -31,57 +31,53 @@ let constructSQL=(json)=>{
 	}
 	if(json.ugTier) {
 		sql+=" AND "+"`UG_Tier1`='Y'";
-	} else {
-		sql+=" AND "+"`UG_Tier1`='N'";
 	}
 	if(json.pgTier) {
 		sql+=" AND "+"`PG_Tier1`='Y'";
-	} else {
-		sql+=" AND "+"`PG_Tier1`='N'";
 	}
 	if(json["ugCourse"].length) {
-		let str="(";
+		let str=" AND ";
 		json["ugCourse"].forEach((val,index)=>{
-			if(json["ugCourse"].length!=index+1)
-				str+="\'"+val+"\',";
+			if(index==0)
+				str+="`U.G_Course` LIKE \'%"+val+"%\'";
 			else
-				str+="\'"+val+"\'";
+				str+=" OR `U.G_Course` LIKE \'%"+val+"%\'";
+
 		});
-		str+=")";
-		sql+=" AND "+"`U.G_Course` IN "+str+" AND ";
+		sql+=str;
 	}
 	if(json["pgCourse"].length) {
-		let str="(";
-		json["pgCourse"].forEach((val,index)=>{
-			if(json["pgCourse"].length!=index+1)
-				str+="\'"+val+"\',";
+		let str=" AND ";
+		json["ugCourse"].forEach((val,index)=>{
+			if(index==0)
+				str+="`PG Course`  LIKE \'%"+val+"%\'";
 			else
-				str+="\'"+val+"\'";
+				str+=" OR `PG Course` LIKE \'%"+val+"%\'";
+
 		});
-		str+=")";
-		sql+=" AND "+"`PG Course` IN "+str+" AND ";
+		sql+=str;
 	}
 	if(json["skillSet"][0]) {
-		let str="(";
+		let str=" AND ";
 		json["skillSet"].forEach((val,index)=>{
-			if(json["skillSet"].length!=index+1)
-				str+="\'"+"%"+val+"%"+"\'"+",";
+			if(index==0)
+				str+="`Skills` LIKE \'%"+val+"%\'";
 			else
-				str+="\'"+"%"+val+"%"+"\'";
+				str+=" OR `Skills` LIKE \'%"+val+"%\'";
+
 		});
-		str+=")";
-		sql+=" AND "+"`Skills` IN "+str+" AND ";
+		sql+=str;
 	}
 	if(json["location"][0]) {
-		let str="(";
+		let str=" AND ";
 		json["location"].forEach((val,index)=>{
-			if(json["location"].length!=index+1)
-				str+="\'"+"%"+val+"%"+"\'"+",";
+			if(index==0)
+				str+="`Corrected_Location`  LIKE \'%"+val+"%\'";
 			else
-				str+="\'"+"%"+val+"%"+"\'";
+				str+=" OR `Corrected_Location` LIKE \'%"+val+"%\'";
+
 		});
-		str+=")";
-		sql+=" AND "+"`Corrected_Location` IN "+str;
+		sql+=str;
 	}
 	log(sql);
 	return sql;
@@ -142,7 +138,7 @@ app.get("/admin",(req,res)=>{
 app.post("/generateReport",(req,res)=>{
 	log(req.body);
 	users.run(constructSQL(req.body))
-		.then((result)=>res.send(result));
+		.then((result)=>res.send(result))
 		.catch((err)=>log(err));
 })
 app.post("/signIn",(req,res)=>{
