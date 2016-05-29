@@ -86,7 +86,23 @@ app.get("/",(req,res)=>{
 	res.render('index');
 });
 app.get("/recruiter/:name",(req,res)=>{
-	res.render("recruiter");
+	log(`recruiter called with ${req.params.name}`);
+	let level;
+	users.getLevel(req.params.name)
+		.then((result)=>{
+			level=result[0]["access_level"];
+			return rules.getRules(level);
+		})
+		.then((result)=>{
+			const ctc_view=result.some((val)=>{
+				return val.can_view=="CTC";
+			});
+			res.render("recruiter",{ctc:ctc_view,user:req.params.name,level:level});
+		})
+		.catch((err)=>{
+			log(err);
+			res.render("error");
+		})
 });
 app.delete("/user",(req,res)=>{
 	const body=req.body;
@@ -137,8 +153,19 @@ app.get("/admin",(req,res)=>{
 });
 app.post("/generateReport",(req,res)=>{
 	log(req.body);
+	let response;
 	users.run(constructSQL(req.body))
-		.then((result)=>res.send(result))
+		.then((result)=>{
+			response=result;
+			const level=req.body.level;
+			return rules.getRules(level);		
+		})
+		.then((result)=>{
+			response.map((val)=>{
+				
+			});
+			res.send(response);
+		})
 		.catch((err)=>log(err));
 })
 app.post("/signIn",(req,res)=>{

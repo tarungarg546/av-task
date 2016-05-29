@@ -46,9 +46,18 @@ let getDefinitions=(array)=>{
 		})
 	})
 }
+let getRules=(level)=>{
+	return new Promise((resolve,reject)=>{
+		console.log("Select `can_view` from `rules` where `access_level`=\'"+level+"\'");
+		conn.query("Select `can_view` from `rules` where `access_level`=\'"+level+"\'")
+			.spread((result)=>resolve(result))
+			.catch((err)=>reject(err));
+	})
+}
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
 	getAccessLevels:getAccessLevels,
-	getDefinitions:getDefinitions
+	getDefinitions:getDefinitions,
+	getRules:getRules
 }

@@ -43,6 +43,17 @@ let modify=(id,newVal)=>{
 			.catch((err)=>reject(err));
 	})
 }
+let getLevel=(name)=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Select access_level from users Where `Name of the Candidate`=\'"+name+"\'")
+			.spread((result)=>{
+				resolve(result);
+			})
+			.catch((err)=>{
+				reject(err)
+			});
+	});
+}
 let delet=(id)=>{
 	return new Promise((resolve,reject)=>{
 		conn.query("Delete from users where `Serial Number`="+id)
@@ -50,7 +61,7 @@ let delet=(id)=>{
 				resolve(response);
 			})
 			.catch((err)=>reject(err));
-	})
+	});
 }
 let runSQL=(sql)=>{
 	return new Promise((resolve,reject)=>{
@@ -70,5 +81,6 @@ module.exports={
 	getAllUsers:getUsers,
 	delete:delet,
 	modify:modify,
-	run:runSQL
+	run:runSQL,
+	getLevel:getLevel
 }

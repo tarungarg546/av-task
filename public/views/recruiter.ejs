@@ -2,9 +2,6 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <!--Prefetch the dns to save dns resolution to save latency time avg. 1sec-->
-    <meta http-equiv="x-dns-prefetch-control" content="on">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <meta name="description" content="Task by Analytics Vidhya">
     <meta name="keywords" content="MEN stack">
     <meta name="author" content="Tarun Garg">
@@ -105,21 +102,22 @@
 		        	
 		        </div>	
 	        </div>
-	        
-	        <div class="row">
-		        <div class="form-group">
-		        	<div class="col-sm-3">
-		        		<label class="control-label">
-							CTC Range :
-						</label>
-		        	</div>
-		        	<div class="col-sm-9">
-			        	<input type="text" class="form-control range" id="ctc-low">
-						-
-						<input type="text" class="form-control range" id="ctc-high">
-		        	</div>
+	        <% if(ctc) { %>
+		        <div class="row">
+			        <div class="form-group">
+			        	<div class="col-sm-3">
+			        		<label class="control-label">
+								CTC Range :
+							</label>
+			        	</div>
+			        	<div class="col-sm-9">
+				        	<input type="text" class="form-control range" id="ctc-low">
+							-
+							<input type="text" class="form-control range" id="ctc-high">
+			        	</div>
+			        </div>
 		        </div>
-	        </div>
+		    <% } %>
 	        <div class="row">
 	        	<div class="form-group">
 	        		<div class="col-sm-3">
@@ -217,6 +215,8 @@
 			}
 		});
 		const json={
+			"user":<%= user %>,
+			"level":<%= level %>,
 			"resume":resume,
 			"analyticsExperience":analyticsExperience,
 			"skillSet":skillSet,
@@ -266,31 +266,6 @@
 			a.download = 'myFile.csv';
 			a.click();
 		})
-		// fetch("/signIn",{
-		// 	method:"POST",
-		// 	headers: {
-		// 		'Accept': 'application/json',
-		// 	    'Content-Type': 'application/json'
-		// 	},
-		// 	body:JSON.stringify(json)
-		// })
-		// .then((res)=>{
-		// 	log(res);
-		// 	return res.json();
-		// })
-		// .then((res)=>{
-		// 	if(res["authenticated"] == false) {
-		// 		$("#credential_alert").style="display:block;";
-		// 		setTimeout(function(){
-		// 			$("#credential_alert").style="display:none;";
-		// 		},1000);
-		// 		$("#user").value="";
-		// 		$("#password").value="";
-		// 	} else if(res["redirect"]===true && res["redirect_url"]) {
-		// 		window.location.href=res["redirect_url"];
-		// 	}
-		// })
-		// .catch((err)=>log(err));
 	});
 </script>
 </html>
