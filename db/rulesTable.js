@@ -54,10 +54,18 @@ let getRules=(level)=>{
 			.catch((err)=>reject(err));
 	})
 }
+let getViews=()=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Select distinct(`can_view`) from `rules`")
+			.spread((result)=>resolve(result))
+			.catch((err)=>reject(err));
+	});
+}
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
 	getAccessLevels:getAccessLevels,
 	getDefinitions:getDefinitions,
-	getRules:getRules
+	getRules:getRules,
+	getViews:getViews
 }

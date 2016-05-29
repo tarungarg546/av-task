@@ -133,6 +133,7 @@ app.get("/admin",(req,res)=>{
 		return rules.exist();
 	})
 	.then((response)=>{
+		log("HERE");
 		if(response==true)
 			return true;
 		return new Error("Table does not exist");
@@ -147,6 +148,10 @@ app.get("/admin",(req,res)=>{
 	})
 	.then((response)=>{
 		json.access_levels=response;
+		return rules.getViews();
+	})
+	.then((result)=>{
+		json.views=result;
 		res.render("admin",json);
 	})
 	.catch((err)=>log(err));

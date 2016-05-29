@@ -94,8 +94,8 @@
 										</select>
 			    					</td>
 			    					<td>
-			    						<span class="glyphicon glyphicon-ok" onclick="modify(<%= users[idx]['Serial Number'] %>)"></span>
-			    						<span class="glyphicon glyphicon-remove" onclick="removeUser(<%= users[idx]['Serial Number'] %>)"></span>
+			    						<span class="glyphicon glyphicon-ok" onclick="modify(<%= users[idx]['Serial Number'] %>)" title="Save"></span>
+			    						<span class="glyphicon glyphicon-remove" onclick="removeUser(<%= users[idx]['Serial Number'] %>)" title="Delete"></span>
 			    					</td>
 			    				</tr>
 			    			<% } %>
@@ -113,7 +113,20 @@
 			    			</th>
 			    		</thead>
 			    		<tbody>
-			    			TODO..
+			    			<% for(var index=0,len=access_levels.length;index<len;index++) { %>
+			    				<% if(access_levels[index]['access_level']!="Normal User") { %>
+			    					<tr>
+				    					<td><%= access_levels[index]['access_level'] %></td>
+				    					<td>
+				    						<% for(var i=0,l=views.length;i<l;i++) { %>
+				    							<% if(views[i]['can_view']!='nothing') { %>
+				    								<input type="checkbox" name="" value="<%= views[i]['can_view'] %>"><%= views[i]['can_view'] %>
+				    							<% } %>
+				    						<% } %>
+				    					</td>
+				    				</tr>
+			    				<% } %>
+			    			<% } %>
 			    		</tbody>
 			    	</table>
 
