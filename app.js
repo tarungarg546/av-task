@@ -5,6 +5,7 @@ const app=express();
 const keys=require("./creden");
 require("./config/express").initExpress(app);
 const users=require("./db/userTable");
+const rules=require("./db/rulesTable");
 const port=process.env.PORT || 8080;
 app.get("/",(req,res)=>{	
 	res.render('index.ejs');
@@ -18,7 +19,16 @@ app.get("/admin",(req,res)=>{
 			return true;
 		return users.create(keys.create_user_table);	
 	}).then((response)=>{
-
+		return rules.exist();
+	})
+	.then((response)=>{
+		if(response==true)
+			return true;
+		return rules.create(keys.create_rules_table);
+	})
+	.then((response)=>{
+		log("Database with table fully setup now.");
+		res.render("admin.ejs");
 	})
 	.catch((err)=>log(err));
 });

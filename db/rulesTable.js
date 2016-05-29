@@ -1,11 +1,12 @@
+"use strict";
 const mysql=require('mysql-promise')();
 const conn=require("./connector.js").connect(mysql);
 let checkIfExist=()=>{
 	return new Promise((resolve, reject)=>{      
 		conn.query("SHOW TABLES LIKE 'RULES'")
 			.then((response)=>{
-				if(response.length!=0) {
-					console.log("Rules Table Exist.");
+				if(response[0].length!=0) {
+					console.log("Rules Table Exist :- ",response[0]);
 					resolve(true);
 				} else {
 					resolve(false);

@@ -6,7 +6,7 @@ let checkIfExist=()=>{
 		conn.query("SHOW TABLES LIKE 'USERS'")
 			.then((response)=>{
 				if(response.length!=0) {
-					console.log("User Table Exist.");
+					console.log("User Table Exist :- ",response[0]);
 					resolve(true);
 				} else {
 					resolve(false);
