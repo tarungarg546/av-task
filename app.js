@@ -88,7 +88,8 @@ app.get("/",(req,res)=>{
 app.get("/recruiter/:name",(req,res)=>{
 	log(`recruiter called with ${req.params.name}`);
 	let level;
-	users.getLevel(req.params.name)
+	const name=decodeURIComponent(req.params.name);
+	users.getLevel(name)
 		.then((result)=>{
 			level=result[0]["access_level"];
 			return rules.getRules(level);
@@ -97,7 +98,7 @@ app.get("/recruiter/:name",(req,res)=>{
 			const ctc_view=result.some((val)=>{
 				return val.can_view=="CTC";
 			});
-			res.render("recruiter",{ctc:ctc_view,user:req.params.name,level:level});
+			res.render("recruiter",{ctc:ctc_view,user:name,level:level});
 		})
 		.catch((err)=>{
 			log(err);
