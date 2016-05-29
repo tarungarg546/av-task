@@ -122,6 +122,15 @@ app.put("/user",(req,res)=>{
 		log(err);
 		res.send({modified:false});
 	})
+});
+app.post("/user",(req,res)=>{
+	const body=req.body;
+	users.add(body["Name of the Candidate"],body["access_level"]).then((result)=>{
+		res.send({added:true});
+	}).catch((err)=>{
+		log(err);
+		res.send({added:false});
+	})
 })
 app.get("/admin",(req,res)=>{
 	let json={};
@@ -154,8 +163,7 @@ app.get("/admin",(req,res)=>{
 		json.views=result;
 		res.render("admin",json);
 	})
-	.catch((err)=>log(err));
-	
+	.catch((err)=>log(err));	
 });
 app.post("/generateReport",(req,res)=>{
 	log(req.body);

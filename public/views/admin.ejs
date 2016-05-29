@@ -59,13 +59,13 @@
 			  <li  role="presentation" class="active">
 			  	<a href="#users" data-toggle="tab" aria-controls="users" role="tab">Users</a>
 			  </li>
-			  <li  role="presentation">
-			  	<a href="#rights" data-toggle="tab" aria-controls="rights" role="tab">User Rights</a>
-			  </li>
 			</ul>
 			<div class="tab-content">
 			    <div role="tabpanel" class="tab-pane active" id="users">
-			    	<table  class="table">
+			    	<div class="row">
+			    		<button class="btn col-sm-3 btn-primary btn-block" type="button" onclick="createNew();">Add new</button>
+			    	</div>
+			    	<table  class="table" id="user_table">
 			    		<thead>
 			    			<th>ID</th>
 			    			<th>User</th>
@@ -102,35 +102,6 @@
 			    		</tbody>
 			    	</table>
 			    </div>
-			    <div role="tabpanel" class="tab-pane" id="rights">
-			    	<table class="table">
-			    		<thead>
-			    			<th>
-			    				Role
-			    			</th>
-			    			<th>
-			    				Capabilities
-			    			</th>
-			    		</thead>
-			    		<tbody>
-			    			<% for(var index=0,len=access_levels.length;index<len;index++) { %>
-			    				<% if(access_levels[index]['access_level']!="Normal User") { %>
-			    					<tr>
-				    					<td><%= access_levels[index]['access_level'] %></td>
-				    					<td>
-				    						<% for(var i=0,l=views.length;i<l;i++) { %>
-				    							<% if(views[i]['can_view']!='nothing') { %>
-				    								<input type="checkbox" name="" value="<%= views[i]['can_view'] %>"><%= views[i]['can_view'] %>
-				    							<% } %>
-				    						<% } %>
-				    					</td>
-				    				</tr>
-			    				<% } %>
-			    			<% } %>
-			    		</tbody>
-			    	</table>
-
-			    </div>
 			</div>
 		</div>
 	</div>
@@ -139,42 +110,103 @@
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	const log=console.log.bind(console);
-	var removeUser=function(serial_number) {
-		result = confirm("Are you sure wants to delete user with id = "+serial_number);
-		if(!result)
-			return ;
-		fetch("/user",{
-			method:"DELETE",
-			headers: {
-		        'Accept': 'application/json',
-		        'Content-Type': 'application/json'
-		    },
-		    body:JSON.stringify({"id":serial_number})
-		}).then((res)=>{
+	const createNew=()=>{
+		const table=$("#user_table > tbody");
+		log(table);
+		const tr=document.createElement("tr");
+		tr.id="cutsom";
+		let td=document.createElement("td");
+		tr.textContent='';
+		tr.appendChild(td);
+		td=document.createElement("td");
+		let input=document.createElement("input");
+		input.type="text";
+		input.autofocus=true;
+		input.id="custom-role";
+		input.classList.add("form-control");
+		td.appendChild(input);
+		tr.appendChild(td);
+		td=document.createElement("td");
+		var select=document.createElement("select");
+		select.classList.add("form-control");
+		select.id="custom-level";
+		<% for(var index=0;index<access_levels.length;index++) { %>
+			var option=document.createElement("option");
+			option.textContent="<%= access_levels[index]['access_level'] %>";
+			select.appendChild(option);
+		<% } %>
+		td.appendChild(select);
+		let span=document.createElement("span");
+		span.classList.add("glyphicon");
+		span.classList.add("glyphicon-ok");
+		span.id="custom-add";
+		//span.onclick=addUser();
+		td.appendChild(span);
+		span=document.createElement("span");
+		span.classList.add("glyphicon");
+		span.classList.add("glyphicon-remove");
+		span.id="custom-remove";
+		//span.onclick=window.location.reload();
+		td.appendChild(span);
+		tr.appendChild(td);
+		$(table).prepend(tr);
+	}
+	$('tbody').on('click',"#custom-add",(ev)=>{
+		ev.preventDefault();
+		let data={
+					"Name of the Candidate":$("#custom-role").val(),
+					"access_level":$("#custom-level").val()
+				};
+		performOp("POST",data).then((res)=>{
 			return res.json();
 		}).then((res)=>{
 			window.location.reload();
 			log(res);
 		}).catch((err)=>{
 			log(err);
+		});
+	});
+	$('tbody').on('click',"#custom-remove",(ev)=>{
+		ev.preventDefault();
+		window.location.reload();
+	});
+	const performOp=(method,data)=>{
+		return new Promise((resolve,reject)=>{
+			fetch("/user",{
+				method:method,
+				headers: {
+			        'Accept': 'application/json',
+			        'Content-Type': 'application/json'
+			    },
+			    body:JSON.stringify(data)
+			}).then((res)=>resolve(res))
+			  .catch((err)=>reject(err))
 		})
+	}
+	const removeUser=(serial_number)=>{
+		result = confirm("Are you sure wants to delete user with id = "+serial_number);
+		if(!result)
+			return ;
+		let data={"id":serial_number};
+		performOp("DELETE",data).then((res)=>{
+			return res.json();
+		}).then((res)=>{
+			window.location.reload();
+			log(res);
+		}).catch((err)=>{
+			log(err);
+		});
 	}
 	var modify=function(serial_number) {
 		const newVal=$("#select-"+serial_number).val();
-		fetch("/user",{
-			method:"PUT",
-			headers: {
-		        'Accept': 'application/json',
-		        'Content-Type': 'application/json'
-		    },
-		    body:JSON.stringify({"id":serial_number,"newVal":newVal})
-		}).then((res)=>{
+		let data={"id":serial_number,"newVal":newVal};
+		performOp("PUT",data).then((res)=>{
 			return res.json();
 		}).then((res)=>{
 			log(res);
 		}).catch((err)=>{
 			log(err);
-		})
+		});
 	}
 	$('#myTabs a').click(function (e) {
 	  e.preventDefault()

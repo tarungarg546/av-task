@@ -32,7 +32,14 @@ let getUsers=()=>{
 			.catch((err)=>reject(err));
 	})
 }
-
+let add=(name,level)=>{
+	return new Promise((resolve,reject)=>{
+		console.log("INSERT INTO `users`	(`Name of the Candidate`,`access_level`) VALUES ("+name+","+level+")");
+		conn.query("INSERT INTO `users`	(`Name of the Candidate`,`access_level`) VALUES (\'"+name+"\',\'"+level+"\')")
+			.spread((result)=>resolve(result))
+			.catch((err)=>reject(err));
+	})
+}
 let modify=(id,newVal)=>{
 	return new Promise((resolve,reject)=>{
 		console.log("Update users SET access_level=\""+newVal+"\" where `Serial Number`="+id);
@@ -81,6 +88,7 @@ module.exports={
 	getAllUsers:getUsers,
 	delete:delet,
 	modify:modify,
+	add:add,
 	run:runSQL,
 	getLevel:getLevel
 }
