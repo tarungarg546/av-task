@@ -5,6 +5,8 @@ const app=express();
 const Cookies=require("cookies");
 let cookies;
 require("./config/express").initExpress(app);
+const mysql=require("mysql");
+require("./db/connector").connect(mysql);
 const port=process.env.PORT||process.env.VCAP_APP_PORT || 8080;
 app.get("/",(req,res)=>{	
 	res.render('index.ejs');

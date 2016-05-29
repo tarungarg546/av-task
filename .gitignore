@@ -6,3 +6,4 @@ npm-debug
 .DS_Store
 /*.env
 /keys
+/creden
