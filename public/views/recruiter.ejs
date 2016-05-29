@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <!--Prefetch the dns to save dns resolution to save latency time avg. 1sec-->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <meta name="description" content="Task by Analytics Vidhya">
+    <meta name="keywords" content="MEN stack">
+    <meta name="author" content="Tarun Garg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Recruiter Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap.min.css">
+	<style type="text/css">
+	body{
+		padding-top: 20px;
+    	padding-bottom: 20px;
+	}
+	.header {
+    	padding-bottom: 20px;
+    	border-bottom: 1px solid #e5e5e5;
+	}
+	@media (min-width: 768px) {
+	  .container {
+	    max-width: 730px;
+	  }
+	}
+	.range{
+		width: auto;
+		display: inline;
+	}
+	.row{
+		margin-top: 1%;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header clearfix">
+	        <nav>
+	          <ul class="nav nav-pills pull-right">
+	            <li role="presentation" class="active"><a href="#">Home</a></li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task/Readme.md" target="_blank">Read Me</a>
+	            </li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task" target="_blank">Github</a>
+	            </li>
+	          </ul>
+	        </nav>
+	        <h3 class="text-muted">Analytics Vidhya Task</h3>
+      	</div>
+		<form class="form" style="margin-top:2%;" id="filterForm">
+	        <div class="form-group">
+	        	<h2>Choose your filters</h2>
+	        </div>
+	        <div class="row">
+	        	<div class="form-group">
+		        	<div class="col-sm-3 col-sm-offset-3">
+		        		<input type="checkbox" id="resume" value="resume">Resume Present
+		        	</div>
+		        	<div class="col-sm-6">
+		        		<input type="checkbox" id="analytics-experience" value="analytics-experience">Experience in Analytics
+		        	</div>	
+	        	</div>
+	        </div>
+	        <div class="row">
+		        <div class="form-group">
+		        	<div class="col-sm-3">
+		        		<label class="control-label">
+							Skill Set (Seperate By comma)
+						</label>
+		        	</div>
+		        	<div class="col-sm-9">
+			        	<input type="text" class="form-control" id="skill-set">
+		        	</div>
+		        </div>
+	        </div>
+	        <div class="row">
+		        <div class="form-group">
+		        	<div class="col-sm-3">
+		        		<label class="control-label">
+							Preferred Location (Seperate By comma)
+						</label>
+		        	</div>
+		        	<div class="col-sm-9">
+			        	<input type="text" class="form-control" id="location">
+		        	</div>
+		        </div>
+	        </div>
+	        <div class="row">
+		        <div class="form-group">
+		        	<div class="col-sm-3">
+			        	<label class="control-label">
+							Work Experience :
+						</label>
+		        	</div>
+		        	<div class="col-sm-9">
+			        	<span style="display:block;">
+			        		<input type="text" class="form-control range" id="experience-low">
+				        	-
+							<input type="text" class="form-control range" id="experience-high">
+			        	</span>	
+		        	</div>
+		        	
+		        </div>	
+	        </div>
+	        
+	        <div class="row">
+		        <div class="form-group">
+		        	<div class="col-sm-3">
+		        		<label class="control-label">
+							CTC Range :
+						</label>
+		        	</div>
+		        	<div class="col-sm-9">
+			        	<input type="text" class="form-control range" id="ctc-low">
+						-
+						<input type="text" class="form-control range" id="ctc-high">
+		        	</div>
+		        </div>
+	        </div>
+	        <div class="row">
+	        	<div class="form-group">
+	        		<div class="col-sm-3">
+	        			<label class="control-label">
+	        				Tier 1 College	
+	        			</label>
+	        		</div>
+	        		<div class="col-sm-9">
+	        			<div class="col-sm-6">
+	        				<input type="checkbox" id="ug-tier" value="ug-tier">
+	        				UG course
+	        			</div>
+	        			<div class="col-sm-6">
+		        			<input type="checkbox" id="pg-tier" value="pg-tier">
+		        			PG course	
+	        			</div>
+	        		</div>
+	        	</div>
+	        </div>
+	        <div class="row">
+	        	<div class="form-group">
+	        		<div class="col-sm-3">
+	        			<label class="control-label">
+	        				UG Courses :
+	        			</label>
+	        		</div>
+	        		<div class="col-sm-9">
+	        			<input type="checkbox" class="ug" value="B.Tech/BE">
+		        		B.Tech/BE
+		        		<input type="checkbox" class="ug" value="B.Sc">
+		        		B.Sc
+		        		<input type="checkbox" class="ug" value="BCA">
+		        		BCA
+	        		</div>
+	        	</div>
+	        </div>
+	        <div class="row">
+	        	<div class="form-group">
+	        		<div class="col-sm-3">
+	        			<label class="control-label">
+	        				PG Courses :
+	        			</label>
+	        		</div>
+	        		<div class="col-sm-9">
+	        			<input type="checkbox" class="pg" value="M.Tech">
+		        		M.Tech
+		        		<input type="checkbox" class="pg" value="M.Sc">
+		        		M.Sc
+		        		<input type="checkbox" class="pg" value="MCA">
+		        		MCA
+	        		</div>
+	        	</div>
+	        </div>
+	        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+	    </form>
+	</div>
+</body>
+<script type="text/javascript">
+	const log=console.log.bind(console);
+	const $=(elem)=>{
+		const arr = document.querySelectorAll(elem);
+		if(arr.length===1) {
+			return arr[0];
+		}
+		return arr;
+	}
+	$("#filterForm").addEventListener('submit',(ev)=>{
+		ev.preventDefault();
+		const resume=$("#resume").checked;
+		const analyticsExperience=$("#analytics-experience").checked;
+		const skillSet=$("#skill-set").value.split(",");
+		const location=$("#location").value.split(",");
+		const workExpriencStart=$("#experience-low").value||0;
+		const workExpriencEnd=$("#experience-high").value;
+		const ctcStart=$("#ctc-low").value||0;
+		const ctcEnd=$("#ctc-high").value;
+		if(!(isFinite(workExpriencStart)&&isFinite(workExpriencEnd)&&isFinite(ctcStart)&&isFinite(ctcEnd))){
+			alert("Can accept only integer/float values in Experience and CTC Ranges.");
+			return ;
+		}
+		const ugTier=$("#ug-tier").checked;
+		const pgTier=$("#pg-tier").checked;
+		let array=Array.from($(".ug"));
+		let ugCourse=[]
+		array.forEach(function(val){
+			if(val.checked) {
+				ugCourse.push(val.value);
+			}
+		});
+		array=Array.from($(".pg"));
+		let pgCourse=[]
+		array.forEach(function(val){
+			if(val.checked) {
+				pgCourse.push(val.value);
+			}
+		});
+		const json={
+			"resume":resume,
+			"analyticsExperience":analyticsExperience,
+			"skillSet":skillSet,
+			"location":location,
+			"workExperience":[workExpriencStart,workExpriencEnd],
+			"ctc":[ctcStart,ctcEnd],
+			"ugTier":ugTier,
+			"pgTier":pgTier,
+			"ugCourse":ugCourse,
+			"pgCourse":pgCourse
+		}
+		log(json)
+		// fetch("/signIn",{
+		// 	method:"POST",
+		// 	headers: {
+		// 		'Accept': 'application/json',
+		// 	    'Content-Type': 'application/json'
+		// 	},
+		// 	body:JSON.stringify(json)
+		// })
+		// .then((res)=>{
+		// 	log(res);
+		// 	return res.json();
+		// })
+		// .then((res)=>{
+		// 	if(res["authenticated"] == false) {
+		// 		$("#credential_alert").style="display:block;";
+		// 		setTimeout(function(){
+		// 			$("#credential_alert").style="display:none;";
+		// 		},1000);
+		// 		$("#user").value="";
+		// 		$("#password").value="";
+		// 	} else if(res["redirect"]===true && res["redirect_url"]) {
+		// 		window.location.href=res["redirect_url"];
+		// 	}
+		// })
+		// .catch((err)=>log(err));
+	});
+</script>
+</html>

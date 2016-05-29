@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <!--Prefetch the dns to save dns resolution to save latency time avg. 1sec-->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <meta name="description" content="Task by Analytics Vidhya">
+    <meta name="keywords" content="MEN stack">
+    <meta name="author" content="Tarun Garg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Analytics Vidhya- Task</title>
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap.min.css">
+	<style type="text/css">
+	body{
+		padding-top: 20px;
+    	padding-bottom: 20px;
+	}
+	.header {
+    	padding-bottom: 20px;
+    	border-bottom: 1px solid #e5e5e5;
+	}
+	@media (min-width: 768px) {
+	  .container {
+	    max-width: 730px;
+	  }
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header clearfix">
+	        <nav>
+	          <ul class="nav nav-pills pull-right">
+	            <li role="presentation" class="active"><a href="#">Home</a></li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task/Readme.md" target="_blank">Read Me</a>
+	            </li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task" target="_blank">Github</a>
+	            </li>
+	          </ul>
+	        </nav>
+	        <h3 class="text-muted">Analytics Vidhya Task</h3>
+      	</div>
+		<form class="form" style="margin-top:2%;" id="signInForm">
+	        <div class="form-group">
+	        	<h2>Please sign in</h2>
+	        </div>
+	        <div class="form-group">
+	        	<label for="user" class="sr-only">Username or Email</label>
+	        	<input type="text" id="user" class="form-control" placeholder="Enter Username/Email" required autofocus>
+	        </div>
+	        <div class="form-group">
+	        	<label for="inputPassword" class="sr-only">Password</label>
+	        	<input type="password" id="password" class="form-control" placeholder="Password" required>
+	        </div>
+	        <div class="form-group">
+	        	<div class="checkbox">
+			        <label>
+			        	<input type="checkbox" value="remember-me"> Remember me
+			        </label>
+		        </div>	
+	        </div>	        
+	        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	        <div class="form-group" style="display:none;" id="credential_alert">
+	        	<div class="alert alert-danger" role="alert" >Invalid Credentials!</div>
+	        </div>
+	    </form>
+	</div>
+</body>
+<script type="text/javascript">
+	const log=console.log.bind(console);
+	const $=(elem)=>{
+		const arr = document.querySelectorAll(elem);
+		if(arr.length===1) {
+			return arr[0];
+		}
+		return arr;
+	}
+	$("#signInForm").addEventListener('submit',(ev)=>{
+		ev.preventDefault();
+		const user=$("#user").value;
+		const password=$("#password").value;
+		const json={
+			"user":user,
+			"password":password
+		}
+		fetch("/signIn",{
+			method:"POST",
+			headers: {
+				'Accept': 'application/json',
+			    'Content-Type': 'application/json'
+			},
+			body:JSON.stringify(json)
+		})
+		.then((res)=>{
+			log(res);
+			return res.json();
+		})
+		.then((res)=>{
+			if(res["authenticated"] == false) {
+				$("#credential_alert").style="display:block;";
+				setTimeout(function(){
+					$("#credential_alert").style="display:none;";
+				},1000);
+				$("#user").value="";
+				$("#password").value="";
+			} else if(res["redirect"]===true && res["redirect_url"]) {
+				window.location.href=res["redirect_url"];
+			}
+		})
+		.catch((err)=>log(err));
+	});
+</script>
+</html>

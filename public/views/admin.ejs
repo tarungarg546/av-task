@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <!--Prefetch the dns to save dns resolution to save latency time avg. 1sec-->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <meta name="description" content="Task by Analytics Vidhya">
+    <meta name="keywords" content="MEN stack">
+    <meta name="author" content="Tarun Garg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap.min.css">
+	<style type="text/css">
+	body{
+		padding-top: 20px;
+    	padding-bottom: 20px;
+	}
+	.header {
+    	padding-bottom: 20px;
+    	border-bottom: 1px solid #e5e5e5;
+	}
+	@media (min-width: 768px) {
+	  .container {
+	    max-width: 730px;
+	  }
+	}
+	.range{
+		width: auto;
+		display: inline;
+	}
+	.row{
+		margin-top: 1%;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header clearfix">
+	        <nav>
+	          <ul class="nav nav-pills pull-right">
+	            <li role="presentation" class="active"><a href="#">Home</a></li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task/Readme.md" target="_blank">Read Me</a>
+	            </li>
+	            <li role="presentation">
+	            	<a href="https://github.com/tarungarg546/av-task" target="_blank">Github</a>
+	            </li>
+	          </ul>
+	        </nav>
+	        <h3 class="text-muted">Analytics Vidhya Task</h3>
+      	</div>
+		<div class="row">
+			<ul class="nav nav-tabs" id="myTabs" role="tablist">
+			  <li  role="presentation" class="active">
+			  	<a href="#users" data-toggle="tab" aria-controls="users" role="tab">Users</a>
+			  </li>
+			  <li  role="presentation">
+			  	<a href="#rights" data-toggle="tab" aria-controls="rights" role="tab">User Rights</a>
+			  </li>
+			</ul>
+			<div class="tab-content">
+			    <div role="tabpanel" class="tab-pane active" id="users">Users</div>
+			    <div role="tabpanel" class="tab-pane" id="rights">Rights</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	const log=console.log.bind(console);
+	$('#myTabs a').click(function (e) {
+	  e.preventDefault()
+	  $(this).tab('show')
+	})
+</script>
+</html>
