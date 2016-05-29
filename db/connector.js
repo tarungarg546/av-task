@@ -12,7 +12,7 @@ const connect=(mysql,keys)=>{
 			console.error(`Error ocuured in connecting to DB : ${err}`);
 			return ;
 		} else {
-			console.log(`Connected to DB `)
+			console.log(`Connected to DB ${connection}`)
 		}
 	});	
 	return connection;
