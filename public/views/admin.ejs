@@ -32,6 +32,13 @@
 	.row{
 		margin-top: 1%;
 	}
+	.glyphicon {
+		background-color: #BFBFDA;
+	    cursor: pointer;
+	    color: rgb(44,149,221);
+	    border-radius: 30%;
+	    font-size: 1.3em;
+	}
 	</style>
 </head>
 <body>
@@ -51,7 +58,7 @@
 	        <h3 class="text-muted">Analytics Vidhya Task</h3>
       	</div>
       	<div>
-      		<%= JSON.stringify(users) %>
+      		<%= JSON.stringify(access_levels) %>
       	</div>
 		<div class="row">
 			<ul class="nav nav-tabs" id="myTabs" role="tablist">
@@ -63,7 +70,44 @@
 			  </li>
 			</ul>
 			<div class="tab-content">
-			    <div role="tabpanel" class="tab-pane active" id="users">Users</div>
+			    <div role="tabpanel" class="tab-pane active" id="users">
+			    	<table  class="table">
+			    		<thead>
+			    			<th>ID</th>
+			    			<th>User</th>
+			    			<th>Role</th>
+			    			<th>Op</th>
+			    		</thead>
+			    		<tbody>
+			    			<% for(var idx=0;idx<users.length;idx++) { %>
+			    				<tr>
+			    					<td><%= users[idx]["Serial Number"]%></td>
+			    					<td><%= users[idx]["Name of the Candidate"] %></td>
+			    					<td>
+			    						<select class="form-control" id="select-<%= users[idx]['Serial Number'] %>">
+			    							<% for(var index=0;index<access_levels.length;index++) { %>
+			    								<% if(users[idx]['access_level'] != access_levels[index]['access_level']) { %>
+			    									<option>
+			    										<%= access_levels[index]["access_level"] %>
+			    									</option>
+			    								<% } else {%>
+			    									<option selected="true">
+			    										<%= access_levels[index]["access_level"] %>
+			    									</option>
+			    								<% } %>
+											    
+											<% } %>
+										</select>
+			    					</td>
+			    					<td>
+			    						<span class="glyphicon glyphicon-ok" onclick="modify(<%= users[idx]['Serial Number'] %>)"></span>
+			    						<span class="glyphicon glyphicon-remove" onclick="removeUser(<%= users[idx]['Serial Number'] %>)"></span>
+			    					</td>
+			    				</tr>
+			    			<% } %>
+			    		</tbody>
+			    	</table>
+			    </div>
 			    <div role="tabpanel" class="tab-pane" id="rights">Rights</div>
 			</div>
 		</div>
@@ -73,6 +117,43 @@
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	const log=console.log.bind(console);
+	var removeUser=function(serial_number) {
+		result = confirm("Are you sure wants to delete user with id = "+serial_number);
+		if(!result)
+			return ;
+		fetch("/user",{
+			method:"DELETE",
+			headers: {
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json'
+		    },
+		    body:JSON.stringify({"id":serial_number})
+		}).then((res)=>{
+			return res.json();
+		}).then((res)=>{
+			window.location.reload();
+			log(res);
+		}).catch((err)=>{
+			log(err);
+		})
+	}
+	var modify=function(serial_number) {
+		const newVal=$("#select-"+serial_number).val();
+		fetch("/user",{
+			method:"PUT",
+			headers: {
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json'
+		    },
+		    body:JSON.stringify({"id":serial_number,"newVal":newVal})
+		}).then((res)=>{
+			return res.json();
+		}).then((res)=>{
+			log(res);
+		}).catch((err)=>{
+			log(err);
+		})
+	}
 	$('#myTabs a').click(function (e) {
 	  e.preventDefault()
 	  $(this).tab('show')

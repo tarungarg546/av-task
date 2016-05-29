@@ -15,6 +15,15 @@ let checkIfExist=()=>{
 			.catch((err)=>reject(err));
     });
 }
+let getAccessLevels=()=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Select distinct(access_level) from rules")
+			.spread((result)=>{
+				resolve(result);
+			})
+			.catch((err)=>reject(err));
+	})
+}
 let createTable=(sql)=>{
 	return new Promise((resolve,reject)=>{
 		conn.query(sql).then((response)=>{
@@ -27,5 +36,5 @@ let createTable=(sql)=>{
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
-	
+	getAccessLevels:getAccessLevels
 }

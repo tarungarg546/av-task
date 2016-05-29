@@ -25,18 +25,29 @@ let createTable=(sql)=>{
 }
 let getUsers=()=>{
 	return new Promise((resolve,reject)=>{
-		conn.query("Select `Name of the Candidate`,`access_level` from users")
+		conn.query("Select `Serial Number`,`Name of the Candidate`,`access_level` from users")
 			.spread((response)=>{
 				resolve(response);
 			})
 			.catch((err)=>reject(err));
 	})
 }
-let getAccessLevels=()=>{
+
+let modify=(id,newVal)=>{
 	return new Promise((resolve,reject)=>{
-		conn.query("Select distinct(access_level) from users")
-			.spread((result)=>{
-				resolve(result);
+		console.log("Update users SET access_level=\""+newVal+"\" where `Serial Number`="+id);
+		conn.query("Update users SET access_level=\""+newVal+"\" where `Serial Number`="+id)
+			.spread((response)=>{
+				resolve(response);
+			})
+			.catch((err)=>reject(err));
+	})
+}
+let delet=(id)=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Delete from users where `Serial Number`="+id)
+			.spread((response)=>{
+				resolve(response);
 			})
 			.catch((err)=>reject(err));
 	})
@@ -45,5 +56,6 @@ module.exports={
 	exist:checkIfExist,
 	create:createTable,
 	getAllUsers:getUsers,
-	getAccessLevels:getAccessLevels
+	delete:delet,
+	modify:modify
 }

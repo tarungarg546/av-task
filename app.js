@@ -13,6 +13,24 @@ app.get("/",(req,res)=>{
 app.get("/recruiter/:name",(req,res)=>{
 	res.render("recruiter");
 });
+app.delete("/user",(req,res)=>{
+	const body=req.body;
+	users.delete(body.id).then((response)=>{
+		res.send({deleted:true});
+	}).catch((err)=>{
+		log(err);
+		res.send({deleted:false});
+	})
+})
+app.put("/user",(req,res)=>{
+	const body=req.body;
+	users.modify(body.id,body.newVal).then((response)=>{
+		res.send({modified:true});
+	}).catch((err)=>{
+		log(err);
+		res.send({modified:false});
+	})
+})
 app.get("/admin",(req,res)=>{
 	let json={};
 	users.exist().then((response)=>{
@@ -32,9 +50,8 @@ app.get("/admin",(req,res)=>{
 		return users.getAllUsers();
 	})
 	.then((response)=>{
-		log(response);
 		json.users=response;
-		return users.getAccessLevels();
+		return rules.getAccessLevels();
 	})
 	.then((response)=>{
 		json.access_levels=response;
