@@ -72,9 +72,9 @@ let constructSQL=(json)=>{
 		let str=" AND ";
 		json["location"].forEach((val,index)=>{
 			if(index==0)
-				str+="`Corrected_Location`  LIKE \'%"+val+"%\'";
+				str+="`Preferred Location`  LIKE \'%"+val+"%\'";
 			else
-				str+=" OR `Corrected_Location` LIKE \'%"+val+"%\'";
+				str+=" OR `Preferred Location` LIKE \'%"+val+"%\'";
 
 		});
 		sql+=str;
@@ -161,8 +161,23 @@ app.post("/generateReport",(req,res)=>{
 			return rules.getRules(level);		
 		})
 		.then((result)=>{
+			const ctc_view=result.some((val)=>{
+				return val.can_view=="CTC";
+			});
+			const contact_view=result.some((val)=>{
+				return val.can_view=="contact_info";
+			})
 			response.map((val)=>{
-				
+				delete val["Serial Number"];
+				if(ctc_view);
+				else {
+					delete val["CTC"];
+				}
+				if(contact_view);
+				else {
+					delete val["Mobile No."];
+					delete val["Email"];
+				}
 			});
 			res.send(response);
 		})

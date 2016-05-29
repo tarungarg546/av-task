@@ -194,10 +194,6 @@
 		const workExpriencEnd=$("#experience-high").value;
 		const ctcStart=$("#ctc-low").value||0;
 		const ctcEnd=$("#ctc-high").value;
-		if(!(isFinite(workExpriencStart)&&isFinite(workExpriencEnd)&&isFinite(ctcStart)&&isFinite(ctcEnd))){
-			alert("Can accept only integer/float values in Experience and CTC Ranges.");
-			return ;
-		}
 		const ugTier=$("#ug-tier").checked;
 		const pgTier=$("#pg-tier").checked;
 		let array=Array.from($(".ug"));
@@ -215,8 +211,8 @@
 			}
 		});
 		const json={
-			"user":<%= user %>,
-			"level":<%= level %>,
+			"user":"<%= user %>",
+			"level":"<%= level %>",
 			"resume":resume,
 			"analyticsExperience":analyticsExperience,
 			"skillSet":skillSet,
