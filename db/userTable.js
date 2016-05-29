@@ -23,7 +23,17 @@ let createTable=(sql)=>{
 		}).catch((err)=>reject(err));
 	});
 }
+let getUsers=()=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Select * from users")
+			.spread((response)=>{
+				resolve(response);
+			})
+			.catch((err)=>reject(err));
+	})
+}
 module.exports={
 	exist:checkIfExist,
-	create:createTable
+	create:createTable,
+	getAllUsers:getUsers
 }

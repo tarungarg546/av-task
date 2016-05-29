@@ -28,9 +28,11 @@ app.get("/admin",(req,res)=>{
 	})
 	.then((response)=>{
 		log("Database with table fully setup now.");
-		res.render("admin.ejs");
+		return users.getAllUsers();
 	})
+	.then((response)=>log(response))
 	.catch((err)=>log(err));
+	res.render("admin.ejs");
 });
 app.post("/signIn",(req,res)=>{
 	log(`Checking .....`);
