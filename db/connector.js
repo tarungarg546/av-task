@@ -1,6 +1,6 @@
 "use strict";
 const connect=(mysql,keys)=>{
-	keys=keys||require("./creden");
+	keys=keys||require("../creden");
 	let connection = mysql.createConnection({
 	  host     : keys.mysql.host,
 	  user     : keys.mysql.user,
@@ -9,10 +9,10 @@ const connect=(mysql,keys)=>{
 	});
 	connection.connect((err)=>{
 		if(err) {
-			log(`Error ocuured in connecting to DB : ${err}`);
+			console.error(`Error ocuured in connecting to DB : ${err}`);
 			return ;
 		} else {
-			log(`Connected to DB `)
+			console.log(`Connected to DB `)
 		}
 	});	
 	return connection;
