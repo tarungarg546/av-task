@@ -52,10 +52,23 @@ let delet=(id)=>{
 			.catch((err)=>reject(err));
 	})
 }
+let runSQL=(sql)=>{
+	return new Promise((resolve,reject)=>{
+		conn.query(sql)
+			.spread((response)=>{
+				resolve(response);
+			})
+			.catch((err)=>{
+				console.error(err);
+				reject(err);
+			})
+	})
+}
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
 	getAllUsers:getUsers,
 	delete:delet,
-	modify:modify
+	modify:modify,
+	run:runSQL
 }

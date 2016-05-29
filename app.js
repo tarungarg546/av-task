@@ -7,6 +7,85 @@ require("./config/express").initExpress(app);
 const users=require("./db/userTable");
 const rules=require("./db/rulesTable");
 const port=process.env.PORT || 8080;
+let constructSQL=(json)=>{
+	let sql="Select * from users where ";
+	if(json.resume) {
+		sql+="`Resume (Yes/No)`='Yes'";
+	} else {
+		sql+="`Resume (Yes/No)`='No'";
+	}
+	if(json.analyticsExperience) {
+		sql+=" AND "+"`Analytics in Exp.`!=''";
+	}
+	if(json.workExperience[0]) {
+		sql+=" AND "+"`Work Experience`>="+json.workExperience[0];
+	}
+	if(json.workExperience[1]) {
+		sql+=" AND "+"`Work Experience`<="+json.workExperience[1];
+	}
+	if(json.ctc[0]) {
+		sql+=" AND "+"`CTC`>="+json.ctc[0];
+	}
+	if(json.ctc[1]) {
+		sql+=" AND "+"`CTC`<="+json.ctc[1];
+	}
+	if(json.ugTier) {
+		sql+=" AND "+"`UG_Tier1`='Y'";
+	} else {
+		sql+=" AND "+"`UG_Tier1`='N'";
+	}
+	if(json.pgTier) {
+		sql+=" AND "+"`PG_Tier1`='Y'";
+	} else {
+		sql+=" AND "+"`PG_Tier1`='N'";
+	}
+	if(json["ugCourse"].length) {
+		let str="(";
+		json["ugCourse"].forEach((val,index)=>{
+			if(json["ugCourse"].length!=index+1)
+				str+="\'"+val+"\',";
+			else
+				str+="\'"+val+"\'";
+		});
+		str+=")";
+		sql+=" AND "+"`U.G_Course` IN "+str+" AND ";
+	}
+	if(json["pgCourse"].length) {
+		let str="(";
+		json["pgCourse"].forEach((val,index)=>{
+			if(json["pgCourse"].length!=index+1)
+				str+="\'"+val+"\',";
+			else
+				str+="\'"+val+"\'";
+		});
+		str+=")";
+		sql+=" AND "+"`PG Course` IN "+str+" AND ";
+	}
+	if(json["skillSet"][0]) {
+		let str="(";
+		json["skillSet"].forEach((val,index)=>{
+			if(json["skillSet"].length!=index+1)
+				str+="\'"+"%"+val+"%"+"\'"+",";
+			else
+				str+="\'"+"%"+val+"%"+"\'";
+		});
+		str+=")";
+		sql+=" AND "+"`Skills` IN "+str+" AND ";
+	}
+	if(json["location"][0]) {
+		let str="(";
+		json["location"].forEach((val,index)=>{
+			if(json["location"].length!=index+1)
+				str+="\'"+"%"+val+"%"+"\'"+",";
+			else
+				str+="\'"+"%"+val+"%"+"\'";
+		});
+		str+=")";
+		sql+=" AND "+"`Corrected_Location` IN "+str;
+	}
+	log(sql);
+	return sql;
+}
 app.get("/",(req,res)=>{	
 	res.render('index');
 });
@@ -57,10 +136,15 @@ app.get("/admin",(req,res)=>{
 		json.access_levels=response;
 		res.render("admin",json);
 	})
-	.then()
 	.catch((err)=>log(err));
 	
 });
+app.post("/generateReport",(req,res)=>{
+	log(req.body);
+	users.run(constructSQL(req.body))
+		.then((result)=>res.send(result));
+		.catch((err)=>log(err));
+})
 app.post("/signIn",(req,res)=>{
 	log(`Checking .....`);
 	const req_data=req.body;

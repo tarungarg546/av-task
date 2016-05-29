@@ -32,9 +32,23 @@ let createTable=(sql)=>{
 		}).catch((err)=>reject(err));
 	});
 }
-
+let getDefinitions=(array)=>{
+	return new Promise((resolve,reject)=>{
+		array.forEach((val)=>{
+			const level=val["access_level"];
+			conn.query("select can_view from rules where access_level="+level)
+				.spread((response)=>{
+					resolve(response);
+				})
+				.catch((err)=>{
+					reject(err);
+				})
+		})
+	})
+}
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
-	getAccessLevels:getAccessLevels
+	getAccessLevels:getAccessLevels,
+	getDefinitions:getDefinitions
 }

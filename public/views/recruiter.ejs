@@ -228,7 +228,26 @@
 			"ugCourse":ugCourse,
 			"pgCourse":pgCourse
 		}
-		log(json)
+		log("Sent JSON:- ",json);
+		fetch("/generateReport",{
+			method:"POST",
+			headers:{
+				'Accept':'application/json',
+				'Content-Type':'application/json'
+			},
+			body:JSON.stringify(json)
+		})
+		.then((res)=>{
+			return res.json();
+		})
+		.then((result)=>{
+			log(result);
+			// var a = document.createElement('a');
+			// a.href = 'data:attachment/csv,' +  encodeURIComponent(csvString);
+			// a.target = '_blank';
+			// a.download = 'myFile.csv';
+			// a.click();
+		})
 		// fetch("/signIn",{
 		// 	method:"POST",
 		// 	headers: {
