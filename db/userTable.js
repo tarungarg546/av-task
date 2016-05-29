@@ -5,7 +5,7 @@ let checkIfExist=()=>{
 	return new Promise((resolve, reject)=>{      
 		conn.query("SHOW TABLES LIKE 'USERS'")
 			.then((response)=>{
-				if(response.length!=0) {
+				if(response[0].length!=0) {
 					console.log("User Table Exist :- ",response[0]);
 					resolve(true);
 				} else {
@@ -25,9 +25,18 @@ let createTable=(sql)=>{
 }
 let getUsers=()=>{
 	return new Promise((resolve,reject)=>{
-		conn.query("Select * from users")
+		conn.query("Select `Name of the Candidate`,`access_level` from users")
 			.spread((response)=>{
 				resolve(response);
+			})
+			.catch((err)=>reject(err));
+	})
+}
+let getAccessLevels=()=>{
+	return new Promise((resolve,reject)=>{
+		conn.query("Select distinct(access_level) from users")
+			.spread((result)=>{
+				resolve(result);
 			})
 			.catch((err)=>reject(err));
 	})
@@ -35,5 +44,6 @@ let getUsers=()=>{
 module.exports={
 	exist:checkIfExist,
 	create:createTable,
-	getAllUsers:getUsers
+	getAllUsers:getUsers,
+	getAccessLevels:getAccessLevels
 }

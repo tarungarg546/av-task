@@ -8,31 +8,41 @@ const users=require("./db/userTable");
 const rules=require("./db/rulesTable");
 const port=process.env.PORT || 8080;
 app.get("/",(req,res)=>{	
-	res.render('index.ejs');
+	res.render('index');
 });
 app.get("/recruiter/:name",(req,res)=>{
-	res.render("recruiter.ejs");
+	res.render("recruiter");
 });
 app.get("/admin",(req,res)=>{
+	let json={};
 	users.exist().then((response)=>{
 		if(response==true)
 			return true;
-		return users.create(keys.create_user_table);	
+		return new Error("Table does not exist");	
 	}).then((response)=>{
 		return rules.exist();
 	})
 	.then((response)=>{
 		if(response==true)
 			return true;
-		return rules.create(keys.create_rules_table);
+		return new Error("Table does not exist");
 	})
 	.then((response)=>{
 		log("Database with table fully setup now.");
 		return users.getAllUsers();
 	})
-	.then((response)=>log(response))
+	.then((response)=>{
+		log(response);
+		json.users=response;
+		return users.getAccessLevels();
+	})
+	.then((response)=>{
+		json.access_levels=response;
+		res.render("admin",json);
+	})
+	.then()
 	.catch((err)=>log(err));
-	res.render("admin.ejs");
+	
 });
 app.post("/signIn",(req,res)=>{
 	log(`Checking .....`);
