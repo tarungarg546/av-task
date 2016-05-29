@@ -4,8 +4,7 @@ const log=console.log.bind();
 const app=express();
 const keys=require("./creden");
 require("./config/express").initExpress(app);
-const mysql=require("mysql");
-const connection=require("./db/connector").connect(mysql,keys);
+const users=require("./db/userTable");
 const port=process.env.PORT || 8080;
 app.get("/",(req,res)=>{	
 	res.render('index.ejs');
@@ -14,14 +13,14 @@ app.get("/recruiter/:name",(req,res)=>{
 	res.render("recruiter.ejs");
 });
 app.get("/admin",(req,res)=>{
-	connection.query(keys.create_user_table,(err,response)=>{
-		if(err)
-			log(err);
-		else {
-			log(`User Table created : ${response}`);
-			res.render("admin.ejs");
-		}
-	});
+	users.exist().then((response)=>{
+		if(response==true)
+			return true;
+		return users.create(keys.create_user_table);	
+	}).then((response)=>{
+
+	})
+	.catch((err)=>log(err));
 });
 app.post("/signIn",(req,res)=>{
 	log(`Checking .....`);
